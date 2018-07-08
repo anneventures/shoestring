@@ -1,0 +1,129 @@
+
+<!DOCTYPE html>
+<html>
+  <title>Shoestring travels</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+  <link href="https://fonts.googleapis.com/css?family=Sunshiney" rel="stylesheet">
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.1.0/css/all.css" integrity="sha384-lKuwvrZot6UHsBSfcMvOkWwlCMgc0TaWr+30HWe3a4ltaBwTZhyTEggF5tJv8tbt" crossorigin="anonymous">
+
+  <style>
+
+    h1 {
+    font-family: 'Sunshiney', cursive;
+    font-size:3.5em;
+    text-align: center;
+    }
+
+    /*body {
+      font-family: 'Cutive Mono', monospace;
+    }*/
+
+    * {
+        box-sizing: border-box;
+    }
+
+    header {
+        margin: 0;
+        font-family: Arial;
+        font-size: 17px;
+        position:relative;
+    }
+
+    input[type=text] {
+      width:70%;
+    }
+
+    form {
+      padding:2% 10%;
+    }
+
+    #myVideo {
+        position: absolute;
+        top:-125px;
+        left: 0;
+        min-width: 100%; 
+        min-height: 100%;
+    }
+
+    .formContent {
+        position: absolute;
+        margin-top: 10%;
+        left:20%;
+        background: rgba(0, 0, 0, 0.5);
+        color: #f1f1f1;
+        width: 60%;
+        padding: 10px;
+    }
+
+    section {
+        position: absolute;
+        margin-top: 40%;
+        right:5%;
+    }
+
+   
+</style>
+
+
+<body class="w3-light-grey">
+
+<!-- Header -->
+<header class="w3-display-container w3-animate-opacity">
+  <video autoplay muted loop id="myVideo">
+    <source src="video/nature.mp4" type="video/mp4">
+    Your browser does not support HTML5 video.
+  </video>
+
+  <div class="formContent">
+    <h1 class=>Shoestring Travels</h1>
+      <form>
+          <div class="w3-half w3-margin-bottom">
+            <label><i class="fa fa-dollar-sign"></i> Your budget (max. $1,000 CDN)</label>
+            <input class="w3-input w3-border w3-center" type="text" placeholder="e.g., 800" required>  
+          </div>
+
+          <div class="w3-half w3-margin-bottom">
+            <label><i class="far fa-calendar-alt"></i> Days free (1-9 days)</label>
+            <input class="w3-input w3-border w3-center" type="text" placeholder="e.g., 2" required>
+          </div>
+
+            <button id="submit" class="w3-btn w3-khaki" type="submit">Start my journey!</button>
+  </div>
+
+</header>
+
+<section>
+  <div class="w3-display-container">
+      <button id="pauseVideo" class="w3-btn w3-dark-grey w3-display-bottomright" onclick="myFunction()">Pause background video</button>
+  </div>
+</section>
+
+<!-- <footer>
+  <p>Copyright &copy; 2018 | Coding Bootcamp</p>
+    <ul>
+      <li>Abbas</li>
+      <li>Anne</li>
+      <li>Nitin</li>
+      <li>Zachary</li>
+    </ul>
+</footer> -->
+
+<script>
+  var video = document.getElementById("myVideo");
+  var btn = document.getElementById("pauseVideo");
+
+  function myFunction() {
+    if (video.paused) {
+      video.play();
+      btn.innerHTML = "Pause video";
+    } else {
+      video.pause();
+      btn.innerHTML = "Play video";
+    }
+  }
+</script>
+
+</body>
+</html>
