@@ -95,6 +95,10 @@
 
   <div class="formContent">
     <h1 class=>Shoestring Travels</h1>
+
+    <button onclick="getLocation()">Get my location</button>
+    <p id="geoTest"></p>
+
       <form>
           <div class="w3-half w3-margin-bottom">
             <label><i class="fa fa-dollar-sign"></i> Your budget (max. $500 CDN)</label>
@@ -246,9 +250,68 @@
 
 
 
-<script src="https://maps.googleapis.com/maps/api/js?key=shoestring-trave-1531226747621&callback=myMap"></script> 
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB7jfMxLfps28YSbbM-VkkWG2_hQGGAlQA&libraries=places&callback=initAutocomplete"
+        async defer></script>
+
+
+
+	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+
 
 <script>
+/* Geolocation */
+
+var geoTest = $("#geoTest");
+
+function getLocation() {
+	if (navigator.geolocation) {
+		navigator.geolocation.watchPosition(showPosition, showError);
+	} else {
+		geoTest.text("Geolocation is not supported by this browser.");
+	}
+}
+
+function showPosition(position) {
+	geoTest.html("<p>Latitude: " + position.coords.latitude + "</p>" + "<p>Longtitude: " + position.coords.longitude + "</p>");
+}
+
+function showError(error) {
+	switch(error.code) {
+		case error.PERMISSION_DENIED:
+			geoTest.html("<input id='autocomplete' placeholder='Enter your address' onFocus='geolocate()' type='text'></input>");
+		break;
+	}
+}
+
+var autocomplete;
+
+      function initAutocomplete() {
+        // Create the autocomplete object, restricting the search to geographical
+        // location types.
+        autocomplete = new google.maps.places.Autocomplete(
+            /** @type {!HTMLInputElement} */(document.getElementById('autocomplete')),
+            {types: ['geocode']});
+      }
+
+      function geolocate() {
+        if (navigator.geolocation) {
+          navigator.geolocation.getCurrentPosition(function(position) {
+            var geolocation = {
+              lat: position.coords.latitude,
+              lng: position.coords.longitude
+            };
+            var circle = new google.maps.Circle({
+              center: geolocation,
+              radius: position.coords.accuracy
+            });
+            autocomplete.setBounds(circle.getBounds());
+          });
+        }
+      }
+
+
+
+/* Background video clip */	
   var video = document.getElementById("myVideo");
   var btn = document.getElementById("pauseVideo");
 
