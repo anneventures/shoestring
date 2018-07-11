@@ -272,7 +272,8 @@ function getLocation() {
 }
 
 function showPosition(position) {
-	geoTest.html("<p>Latitude: " + position.coords.latitude + "</p>" + "<p>Longtitude: " + position.coords.longitude + "</p>");
+  geoTest.html("<p>Latitude: " + position.coords.latitude + "</p>" + "<p>Longtitude: " + position.coords.longitude + "</p>");
+  
 }
 
 function showError(error) {
@@ -310,7 +311,6 @@ var autocomplete;
       }
 
 
-
 /* Background video clip */	
   var video = document.getElementById("myVideo");
   var btn = document.getElementById("pauseVideo");
@@ -325,6 +325,6 @@ var autocomplete;
     }
   }
 </script>
-
+<script src="app.js"></script>
 </body>
 </html>
