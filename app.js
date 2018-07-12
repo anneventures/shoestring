@@ -109,6 +109,7 @@
     var adventure = ["hiking", "climbing", "outdoors", "adventure", "park"];
     var artist = ["museum", "wine", "lounge", "cafe", "concert"];
     var foodie = ["restaurant", "market", "bakery", "ice cream"];
+    
     $.ajax({
         url: queryURL,
         method: "GET"
