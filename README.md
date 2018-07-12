@@ -7,3 +7,11 @@
   <li>Google map API</li>
   <li>Foursquare API</li>
 </ul>
+
+<h2>Group project members</h2>
+<ul>
+  <li>Abbas (Mr. Logic)</li>
+  <li>Anne (Ms. UI)</li>
+  <li>Nitin (Mr. UX)</li>
+  <li>Zachary (Mr. Syntax)</li>
+</ul>
