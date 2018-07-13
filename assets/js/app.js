@@ -1,21 +1,32 @@
 
   var clientId = 'PFQQTXP5LX0VKPGQCR4WVCIKXNEUZ0AMOQU0PJS51EZDO4GJ';  // foursquare api login info
   var clientSecret = 'HVMCQNQDBNFN2PHWRYVBYYGV54G5V2CQJYYXCYS2VQ5HF0FH';
-
   // get the user's geolocation and store it into a variable
-  window.onload = getMyLocation;
- 
+  
+
+
   var map;
+  window.onload = getMyLocation;
 
   function getMyLocation() {
-  var address = document.querySelector("#address");
-  address.addEventListener("click", function getLocation() {
+  var searchBtn = document.querySelector("#search");
+  searchBtn.addEventListener("click", function(event) {
+    event.preventDefault();
+    var city = document.querySelector("#myCity").value;
+    queryForCity(city);
+  });
+
+  var myLocation = document.querySelector("#myLocation");
+  myLocation.addEventListener("click", function getLocation() {
     if (navigator.geolocation) {
       navigator.geolocation.watchPosition(displayLocation);
+      myLocation.value=" ";
+
+      myLocation.disabled=true;
     } else {
-      address.innerHTML = "Geolocation is not supported by this browser.";
+      locationDenied.innerHTML = "Geolocation is not supported by this browser.";
     }
-        });
+  });
         
   }
    
@@ -28,14 +39,15 @@
     //Creating a new object for using latitude and longitude values with Google map.
     var latLng = new google.maps.LatLng(latitude, longitude);
    
-    showMap(latLng);
+    // showMap(latLng);
    
-    addNearByPlaces(latLng);
-    createMarker(latLng);
+    // addNearByPlaces(latLng);
+    // createMarker(latLng);
+
     queryForSquare(latitude, longitude); // queries the foursquare API using the user's lat and long
     //Also setting the latitude and longitude values in another div.
-    var div = document.getElementById("location");
-    div.innerHTML = "You are at Latitude: " + latitude + ", Longitude: " + longitude;
+    // var div = document.getElementById("location");
+    // div.innerHTML = "You are at Latitude: " + latitude + ", Longitude: " + longitude;
   }
 
   function showMap(latLng) {
@@ -97,7 +109,8 @@
     var infoWindow = new google.maps.InfoWindow(infoWindowOptions);
    
     google.maps.event.addListener(marker, "click", function() {
-      infoWindow.open(map);
+      alert("infoWindow");
+      // infoWindow.open(map);
     });
   }
  
@@ -105,19 +118,38 @@
     //search URL base
     //"&query='taco'" + search query term example
     // var queryURL = "https://api.foursquare.com/v2/venues/search?ll=40.7,-74&client_id=" + clientId + "&client_secret=" + clientSecret+ "&v=20181107";
-    var queryURL = "https://api.foursquare.com/v2/venues/search?ll=" + latitude + "," + longitude +  "&client_id=" + clientId + "&client_secret=" + clientSecret+ "&v=20181107";
-    var adventure = ["hiking", "climbing", "outdoors", "adventure", "park"];
-    var artist = ["museum", "wine", "lounge", "cafe", "concert"];
-    var foodie = ["restaurant", "market", "bakery", "ice cream"];
-    
+    var queryURL = "https://api.foursquare.com/v2/venues/search?ll=" + latitude + "," + longitude + "&query=motel" + "&client_id=" + clientId + "&client_secret=" + clientSecret + "&v=20181107";
+    // var adventure = ["hiking", "climbing", "outdoors", "adventure", "park"];
+    // var artist = ["museum", "wine", "lounge", "cafe", "concert"];
+    // var foodie = ["restaurant", "market", "bakery", "ice cream"];
+
     $.ajax({
         url: queryURL,
-        method: "GET"
+        method:"GET"
     }).then(function(response) {
-                var hikingreturn = response.response.venues[j].name;
-                console.log(hikingreturn);
-    });
+                // var hikingreturn = response.response.venues[j].name;
+                // console.log(hikingreturn);
+  var motelDiv = $("#motel");
+
+    var motel = response.response.venues[1].name;
+    motelDiv.text(motel);
+  });
 }
+
+  function queryForCity(city) {
+
+    var queryURL = "https://api.foursquare.com/v2/venues/search?near=" + city + "&query=motel" + "&client_secret=" + clientSecret + "&client_id=" + clientId + "&v=20181107";
+    $.ajax({
+      url: queryURL,
+      method: "GET"
+    }).then(function(response) {
+  var motelDiv = $("#motel");
+
+    var motel = response.response.venues[0].name;
+    motelDiv.text(motel);
+    }); 
+  }
+
 
 
 
