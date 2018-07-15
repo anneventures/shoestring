@@ -43,8 +43,9 @@
    
     // addNearByPlaces(latLng);
     // createMarker(latLng);
+    queryFourSquare(latitude,longitude);
 
-    queryForSquare(latitude, longitude); // queries the foursquare API using the user's lat and long
+     // queries the foursquare API using the user's lat and long
     //Also setting the latitude and longitude values in another div.
     // var div = document.getElementById("location");
     // div.innerHTML = "You are at Latitude: " + latitude + ", Longitude: " + longitude;
@@ -114,27 +115,7 @@
     });
   }
  
-  function queryForSquare(latitude, longitude) {
-    //search URL base
-    //"&query='taco'" + search query term example
-    // var queryURL = "https://api.foursquare.com/v2/venues/search?ll=40.7,-74&client_id=" + clientId + "&client_secret=" + clientSecret+ "&v=20181107";
-    var queryURL = "https://api.foursquare.com/v2/venues/search?ll=" + latitude + "," + longitude + "&query=motel" + "&client_id=" + clientId + "&client_secret=" + clientSecret + "&v=20181107";
-    // var adventure = ["hiking", "climbing", "outdoors", "adventure", "park"];
-    // var artist = ["museum", "wine", "lounge", "cafe", "concert"];
-    // var foodie = ["restaurant", "market", "bakery", "ice cream"];
-
-    $.ajax({
-        url: queryURL,
-        method:"GET"
-    }).then(function(response) {
-                // var hikingreturn = response.response.venues[j].name;
-                // console.log(hikingreturn);
-  var motelDiv = $("#motel");
-
-    var motel = response.response.venues[1].name;
-    motelDiv.text(motel);
-  });
-}
+  
 
   function queryForCity(city) {
 
@@ -149,6 +130,181 @@
     motelDiv.text(motel);
     }); 
   }
+
+function queryFourSquare(latitude, longitude) {
+     
+        var adventure = ["hiking", "climbing", "swimming", "adventure", "park"];
+        var artist = ["museum", "wine", "lounge", "cafe", "concert"];
+        var foodie = ["restaurant", "market", "bakery", "ice cream"];
+        
+    function artistList(artist) {
+        for (i = 0; i < artist.length; i++){ 
+            var queryArtist = artist[i];                                 //queries user location to find stuff around them     // sets the query search phrase using each element of each array and performs seperate queries
+            var queryURL = "https://api.foursquare.com/v2/venues/search?ll=" + latitude + "," + longitude + "&radius=100000"  + "&query=" + queryArtist +  "&client_id=" + clientId + "&client_secret=" + clientSecret+ "&v=20181107";
+            $.ajax({
+                url: queryURL,
+                method: "GET"
+            }).then(function(response) {  // initial query gets venue id#
+              var artistReturn = {};      
+              artistReturn.venueID = [];
+              artistReturn.venueName = [];  
+                  
+                  for (x = 0; x < 10; x++) {
+                      var venueIDReturn = response.response.venues[x].id; // gets venue id # for each elemnt in the queried array. 
+                      var venueNameReturn = response.response.venues[x].name;
+                      artistReturn.venueID.push(venueIDReturn);
+                      artistReturn.venueName.push(venueNameReturn);
+                     
+                      // queries the retrieved venue IDs against foursquare.com to get all venue details  
+                     var queryScoreURL = "https://api.foursquare.com/v2/venues/" + artistReturn.venueID[x] + "?oauth_token=DHVGRFTS5XYVGWNKPHOKWYKIFLNSSKMEKRGUPJBMYWJIHGSG&v=20181107";  
+                     $.ajax({
+                         url: queryScoreURL,
+                         method: "GET"
+                     }).then(function(response){
+                      var nameAndScore = {}; 
+                      nameAndScore.name = []; 
+                      nameAndScore.rating = [];
+                      nameAndScore.photo = [];
+                      nameAndScore.price = [];
+                      nameAndScore.name.push(response.response.venue.name);  
+                      nameAndScore.rating.push(response.response.venue.rating);
+                      nameAndScore.photo.push(response.response.venue.bestPhoto);
+                      // nameAndScore.price.push(response.response.venue.price); for price integration at a later date
+  
+                          if (nameAndScore.rating > 7) { // only outputs venues with a user rating of 7 or higher
+                              for (j = 0; j < nameAndScore.rating.length; j++){
+
+                                while(x < 3){  // setup while looop to ensure that only 3 items are output to user.
+                                    var displayName =("<p>" + nameAndScore.name[j] + "</p>");
+                                    var displayRating =("<p>" + nameAndScore.rating[j] + "</p>");
+                                    var buildphoto = nameAndScore.photo[j].prefix + 200 + nameAndScore.photo[j].suffix;  // change number between links to change image size :D
+                                    $("#mydiv").append(displayName); // PLUG THIS INTO DIV TO DISPLAY ON CARDS
+                                    $("#mydiv").append("User score: " + displayRating);  // PLUG THIS INTO DIV TO DISPLAY ON CARDS
+                                    $("#mydiv").append("<img src=" + buildphoto + "/>"); // PLUG THIS INTO DIV TO DISPLAY ON CARDS    
+                                    x++;
+                                }
+                                  
+                              }    
+                          }
+                     });
+                  };
+            });
+        };
+    }
+
+
+
+    function foodieList(foodie) {
+        for (i = 0; i < foodie.length; i++){ 
+            var queryFoodie = foodie[i];                                 //queries user location to find stuff around them     // sets the query search phrase using each element of each array and performs seperate queries
+            var queryURL = "https://api.foursquare.com/v2/venues/search?ll=" + latitude + "," + longitude + "&radius=100000"  + "&query=" + queryFoodie +  "&client_id=" + clientId + "&client_secret=" + clientSecret+ "&v=20181107";
+            $.ajax({
+                url: queryURL,
+                method: "GET"
+            }).then(function(response) {  // initial query gets venue id#
+              var foodieReturn = {};      
+              foodieReturn.venueID = [];
+              foodieReturn.venueName = [];  
+                  
+                  for (x = 0; x < 1; x++) {
+                      var venueIDReturn = response.response.venues[x].id; // gets venue id # for each elemnt in the queried array. 
+                      var venueNameReturn = response.response.venues[x].name;
+                      foodieReturn.venueID.push(venueIDReturn);
+                      foodieReturn.venueName.push(venueNameReturn);
+                     
+                      // queries the retrieved venue IDs against foursquare.com to get all venue details  
+                     var queryScoreURL = "https://api.foursquare.com/v2/venues/" + foodieReturn.venueID[x] + "?oauth_token=DHVGRFTS5XYVGWNKPHOKWYKIFLNSSKMEKRGUPJBMYWJIHGSG&v=20181107";  
+                     $.ajax({
+                         url: queryScoreURL,
+                         method: "GET"
+                     }).then(function(response){
+                      var nameAndScore = {}; 
+                      nameAndScore.name = []; 
+                      nameAndScore.rating = [];
+                      nameAndScore.photo = [];
+                      nameAndScore.price = [];
+                      nameAndScore.name.push(response.response.venue.name);  
+                      nameAndScore.rating.push(response.response.venue.rating);
+                      nameAndScore.photo.push(response.response.venue.bestPhoto);
+                      // nameAndScore.price.push(response.response.venue.price); for price integration at a later date
+  
+                          if (nameAndScore.rating > 7) { // only outputs venues with a user rating of 7 or higher
+                              for (j = 0; j < nameAndScore.rating.length; j++){
+                                  var displayName =("<p>" + nameAndScore.name[j] + "</p>");
+                                  var displayRating =("<p>" + nameAndScore.rating[j] + "</p>");
+                                  var buildphoto = nameAndScore.photo[j].prefix + 200 + nameAndScore.photo[j].suffix;  // change number between links to change image size :D
+                          
+                                  $("#mydiv").append(displayName); // PLUG THIS INTO DIV TO DISPLAY ON CARDS
+                                  $("#mydiv").append("User score: " + displayRating);  // PLUG THIS INTO DIV TO DISPLAY ON CARDS
+                                  $("#mydiv").append("<img src=" + buildphoto + "/>"); // PLUG THIS INTO DIV TO DISPLAY ON CARDS    
+                              }    
+                          }
+                     });
+                  };
+            });
+        };
+    }
+
+    function adventureList(adventure) {
+        for (i = 0; i < adventure.length; i++){ 
+            var queryAdventure = adventure[i];                                 //queries user location to find stuff around them     // sets the query search phrase using each element of each array and performs seperate queries
+            var queryURL = "https://api.foursquare.com/v2/venues/search?ll=" + latitude + "," + longitude + "&radius=100000"  + "&query=" + queryAdventure +  "&client_id=" + clientId + "&client_secret=" + clientSecret+ "&v=20181107";
+            $.ajax({
+                url: queryURL,
+                method: "GET"
+            }).then(function(response) {  // initial query gets venue id#
+              var adventureReturn = {};      
+              adventureReturn.venueID = [];
+              adventureReturn.venueName = [];  
+                  
+                  for (x = 0; x < 1; x++) {
+                      var venueIDReturn = response.response.venues[x].id; // gets venue id # for each elemnt in the queried array. 
+                      var venueNameReturn = response.response.venues[x].name;
+                      adventureReturn.venueID.push(venueIDReturn);
+                      adventureReturn.venueName.push(venueNameReturn);
+                     
+                      // queries the retrieved venue IDs against foursquare.com to get all venue details  
+                     var queryScoreURL = "https://api.foursquare.com/v2/venues/" + adventureReturn.venueID[x] + "?oauth_token=DHVGRFTS5XYVGWNKPHOKWYKIFLNSSKMEKRGUPJBMYWJIHGSG&v=20181107";  
+                     $.ajax({
+                         url: queryScoreURL,
+                         method: "GET"
+                     }).then(function(response){
+                      var nameAndScore = {}; 
+                      nameAndScore.name = []; 
+                      nameAndScore.rating = [];
+                      nameAndScore.photo = [];
+                      nameAndScore.price = [];
+                      nameAndScore.name.push(response.response.venue.name);  
+                      nameAndScore.rating.push(response.response.venue.rating);
+                      nameAndScore.photo.push(response.response.venue.bestPhoto);
+                      // nameAndScore.price.push(response.response.venue.price); for price integration at a later date
+  
+                          if (nameAndScore.rating > 7) { // only outputs venues with a user rating of 7 or higher
+                              for (j = 0; j < nameAndScore.rating.length; j++){
+                                  var displayName =("<p>" + nameAndScore.name[j] + "</p>");
+                                  var displayRating =("<p>" + nameAndScore.rating[j] + "</p>");
+                                  var buildphoto = nameAndScore.photo[j].prefix + 200 + nameAndScore.photo[j].suffix;  // change number between links to change image size :D
+                          
+                                  $("#mydiv").append(displayName); // PLUG THIS INTO DIV TO DISPLAY ON CARDS
+                                  $("#mydiv").append("User score: " + displayRating);  // PLUG THIS INTO DIV TO DISPLAY ON CARDS
+                                  $("#mydiv").append("<img src=" + buildphoto + "/>"); // PLUG THIS INTO DIV TO DISPLAY ON CARDS    
+                              }    
+                          }
+                     });
+                  };
+            });
+        };
+    }
+        
+       // adventureList(adventure);
+       // foodieList(foodie);
+       // artistList(artist);
+    };
+
+
+
+
+
 
 
 
