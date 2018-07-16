@@ -35,8 +35,8 @@ header {
   width:100%;
 }
 
-#budget, #days {
-  width:25%;
+input[type=text] {
+  width:50%;
 }
 
 form {
