@@ -29,7 +29,7 @@
   });
         
   }
-   
+
   //This function is inokved asynchronously by the HTML5 geolocation API.
   function displayLocation(position) {
     //The latitude and longitude values obtained from HTML 5 API.
@@ -137,65 +137,61 @@ function queryFourSquare(latitude, longitude) {
         var artist = ["museum", "wine", "lounge", "cafe", "concert"];
         var foodie = ["restaurant", "market", "bakery", "ice cream"];
         
-    function artistList(artist) {
-        for (i = 0; i < artist.length; i++){ 
-            var queryArtist = artist[i];                                 //queries user location to find stuff around them     // sets the query search phrase using each element of each array and performs seperate queries
-            var queryURL = "https://api.foursquare.com/v2/venues/search?ll=" + latitude + "," + longitude + "&radius=100000"  + "&query=" + queryArtist +  "&client_id=" + clientId + "&client_secret=" + clientSecret+ "&v=20181107";
-            $.ajax({
-                url: queryURL,
-                method: "GET"
-            }).then(function(response) {  // initial query gets venue id#
-              var artistReturn = {};      
-              artistReturn.venueID = [];
-              artistReturn.venueName = [];  
-                  
-                  for (x = 0; x < 10; x++) {
-                      var venueIDReturn = response.response.venues[x].id; // gets venue id # for each elemnt in the queried array. 
-                      var venueNameReturn = response.response.venues[x].name;
-                      artistReturn.venueID.push(venueIDReturn);
-                      artistReturn.venueName.push(venueNameReturn);
-                     
-                      // queries the retrieved venue IDs against foursquare.com to get all venue details  
-                     var queryScoreURL = "https://api.foursquare.com/v2/venues/" + artistReturn.venueID[x] + "?oauth_token=DHVGRFTS5XYVGWNKPHOKWYKIFLNSSKMEKRGUPJBMYWJIHGSG&v=20181107";  
-                     $.ajax({
-                         url: queryScoreURL,
-                         method: "GET"
-                     }).then(function(response){
-                      var nameAndScore = {}; 
-                      nameAndScore.name = []; 
-                      nameAndScore.rating = [];
-                      nameAndScore.photo = [];
-                      nameAndScore.price = [];
-                      nameAndScore.name.push(response.response.venue.name);  
-                      nameAndScore.rating.push(response.response.venue.rating);
-                      nameAndScore.photo.push(response.response.venue.bestPhoto);
-                      // nameAndScore.price.push(response.response.venue.price); for price integration at a later date
   
-                          if (nameAndScore.rating > 7) { // only outputs venues with a user rating of 7 or higher
-                              for (j = 0; j < nameAndScore.rating.length; j++){
-
-                                while(x < 3){  // setup while looop to ensure that only 3 items are output to user.
+        function artistList(foodie) {
+          for (i = 0; i < 4; i++){ 
+              var queryArtist = artist[i];                                 //queries user location to find stuff around them     // sets the query search phrase using each element of each array and performs seperate queries
+              var queryURL = "https://api.foursquare.com/v2/venues/search?ll=" + latitude + "," + longitude + "&radius=100000"  + "&query=" + queryArtist +  "&client_id=" + clientId + "&client_secret=" + clientSecret+ "&v=20181107";
+              $.ajax({
+                  url: queryURL,
+                  method: "GET"
+              }).then(function(response) {  // initial query gets venue id#
+                var artistReturn = {};      
+                artistReturn.venueID = [];
+                artistReturn.venueName = [];  
+                    
+                    for (x = 0; x < 1; x++) {
+                        var venueIDReturn = response.response.venues[x].id; // gets venue id # for each elemnt in the queried array. 
+                        var venueNameReturn = response.response.venues[x].name;
+                        artistReturn.venueID.push(venueIDReturn);
+                        artistReturn.venueName.push(venueNameReturn);
+                       
+                        // queries the retrieved venue IDs against foursquare.com to get all venue details  
+                       var queryScoreURL = "https://api.foursquare.com/v2/venues/" + artistReturn.venueID[x] + "?oauth_token=DHVGRFTS5XYVGWNKPHOKWYKIFLNSSKMEKRGUPJBMYWJIHGSG&v=20181107";  
+                       $.ajax({
+                           url: queryScoreURL,
+                           method: "GET"
+                       }).then(function(response){
+                        var nameAndScore = {}; 
+                        nameAndScore.name = []; 
+                        nameAndScore.rating = [];
+                        nameAndScore.photo = [];
+                        nameAndScore.price = [];
+                        nameAndScore.name.push(response.response.venue.name);  
+                        nameAndScore.rating.push(response.response.venue.rating);
+                        nameAndScore.photo.push(response.response.venue.bestPhoto);
+                        // nameAndScore.price.push(response.response.venue.price); for price integration at a later date
+    
+                            if (nameAndScore.rating > 7) { // only outputs venues with a user rating of 7 or higher
+                                for (j = 0; j < nameAndScore.rating.length; j++){
                                     var displayName =("<p>" + nameAndScore.name[j] + "</p>");
                                     var displayRating =("<p>" + nameAndScore.rating[j] + "</p>");
                                     var buildphoto = nameAndScore.photo[j].prefix + 200 + nameAndScore.photo[j].suffix;  // change number between links to change image size :D
+                            
                                     $("#mydiv").append(displayName); // PLUG THIS INTO DIV TO DISPLAY ON CARDS
                                     $("#mydiv").append("User score: " + displayRating);  // PLUG THIS INTO DIV TO DISPLAY ON CARDS
                                     $("#mydiv").append("<img src=" + buildphoto + "/>"); // PLUG THIS INTO DIV TO DISPLAY ON CARDS    
-                                    x++;
-                                }
-                                  
-                              }    
-                          }
-                     });
-                  };
-            });
-        };
-    }
-
+                                }    
+                            }
+                       });
+                    };
+              });
+          };
+      }
 
 
     function foodieList(foodie) {
-        for (i = 0; i < foodie.length; i++){ 
+        for (i = 0; i < 4; i++){ 
             var queryFoodie = foodie[i];                                 //queries user location to find stuff around them     // sets the query search phrase using each element of each array and performs seperate queries
             var queryURL = "https://api.foursquare.com/v2/venues/search?ll=" + latitude + "," + longitude + "&radius=100000"  + "&query=" + queryFoodie +  "&client_id=" + clientId + "&client_secret=" + clientSecret+ "&v=20181107";
             $.ajax({
@@ -246,7 +242,7 @@ function queryFourSquare(latitude, longitude) {
     }
 
     function adventureList(adventure) {
-        for (i = 0; i < adventure.length; i++){ 
+        for (i = 0; i < 4; i++){ 
             var queryAdventure = adventure[i];                                 //queries user location to find stuff around them     // sets the query search phrase using each element of each array and performs seperate queries
             var queryURL = "https://api.foursquare.com/v2/venues/search?ll=" + latitude + "," + longitude + "&radius=100000"  + "&query=" + queryAdventure +  "&client_id=" + clientId + "&client_secret=" + clientSecret+ "&v=20181107";
             $.ajax({
@@ -312,6 +308,4 @@ function queryFourSquare(latitude, longitude) {
 
  
  
-  
-  
-
+   
