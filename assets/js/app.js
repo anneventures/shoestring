@@ -38,11 +38,11 @@
     // addNearByPlaces(latLng);
     // createMarker(latLng);
 
-  var searchBtn = document.querySelector("#search");
-  searchBtn.addEventListener("click", function(event) {
-    event.preventDefault();    
+ // var searchBtn = document.querySelector("#search");
+  //searchBtn.addEventListener("click", function(event) {
+    //event.preventDefault();    
     queryFourSquare(latitude,longitude);
-});
+//});
      // queries the foursquare API using the user's lat and long
     //Also setting the latitude and longitude values in another div.
     // var div = document.getElementById("location");
