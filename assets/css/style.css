@@ -96,6 +96,8 @@ h1 {
   font-size:7vw;
   }  
 #myVideo {
-display:none;
-} 
+  display:none;
+}
+  
+#pauseVideo {display:none;}
 }
