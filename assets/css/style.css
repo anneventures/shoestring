@@ -1,5 +1,4 @@
 /***** Shoestring travel styles *****/
-/***** Last edited: July 12th ****/;
 
 html {
   height: 100%;
@@ -90,4 +89,10 @@ footer {
   margin-top:140%;
   width:100%;
   margin-left:2%;
+}
+
+@media (max-width:768px) {
+#myVideo {
+display:none;
+} 
 }
