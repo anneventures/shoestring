@@ -95,9 +95,7 @@ footer {
 h1 {
   font-size:7vw;
   }  
-#myVideo {
+#myVideo, #pauseVideo, .w3-quarter p {
   display:none;
 }
-  
-#pauseVideo {display:none;}
-}
+
