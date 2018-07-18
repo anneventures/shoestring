@@ -92,6 +92,9 @@ footer {
 }
 
 @media (max-width:768px) {
+h1 {
+  font-size:7vw;
+  }  
 #myVideo {
 display:none;
 } 
