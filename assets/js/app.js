@@ -32,101 +32,12 @@ function displayLocation(position) {
   //Creating a new object for using latitude and longitude values with Google map.
   var latLng = new google.maps.LatLng(latitude, longitude);
  
-  // showMap(latLng);
- 
-  // addNearByPlaces(latLng);
-  // createMarker(latLng);
-
-// var searchBtn = document.querySelector("#search");
-//searchBtn.addEventListener("click", function(event) {
-  //event.preventDefault();    
+   
   queryFourSquare(latitude,longitude);
-//});
-   // queries the foursquare API using the user's lat and long
-  //Also setting the latitude and longitude values in another div.
-  // var div = document.getElementById("location");
-  // div.innerHTML = "You are at Latitude: " + latitude + ", Longitude: " + longitude;
-}
 
-function showMap(latLng) {
-  //Setting up the map options like zoom level, map type.
-  var mapOptions = {
-    center: latLng,
-    zoom: 15,
-    mapTypeId: google.maps.MapTypeId.ROADMAP
-  };
-  //Creating the Map instance and assigning the HTML div element to render it in.
-  map = new google.maps.Map(document.getElementById("map-canvas"), mapOptions);
-}
- 
-function addNearByPlaces(latLng) {
-  var nearByService = new google.maps.places.PlacesService(map);
-  var request = {
-    location: latLng,
-    radius: 5000,
-    types: ['lodging', 'point_of_interest', 'establishment']
-  };
-  nearByService.nearbySearch(request, handleNearBySearchResults);
-}
- 
-function handleNearBySearchResults(results, status) {
-  if (status == google.maps.places.PlacesServiceStatus.OK) {
-    for (var i = 0; i < results.length; i++) {
-      var place = results[i];
-      createMarker(place.geometry.location, place);
-    }
-  }
-}
- 
-function createMarker(latLng, placeResult) {
-  var markerOptions = {
-    position: latLng,
-    map: map,
-    animation: google.maps.Animation.DROP,
-    clickable: true
-  }
-  //Setting up the marker object to mark the location on the map canvas.
-  var marker = new google.maps.Marker(markerOptions);
- 
-  if (placeResult) {
-    var content = placeResult.name+"<br/>"+placeResult.vicinity+"<br/>"+placeResult.types;
-    addInfoWindow(marker, latLng, content);
-  }
-  else {
-    var content = "You are here: " + latLng.lat() + ", " + latLng.lng();
-    addInfoWindow(marker, latLng, content);
-  }
-}
- 
-function addInfoWindow(marker, latLng, content) {
-  var infoWindowOptions = {
-    content: content,
-    position: latLng
-  };
- 
-  var infoWindow = new google.maps.InfoWindow(infoWindowOptions);
- 
-  google.maps.event.addListener(marker, "click", function() {
-    alert("infoWindow");
-    // infoWindow.open(map);
-  });
 }
 
 
-
-function queryForCity(city) {
-
-  var queryURL = "https://api.foursquare.com/v2/venues/search?near=" + city + "&query=motel" + "&client_secret=" + clientSecret + "&client_id=" + clientId + "&v=20181107";
-  $.ajax({
-    url: queryURL,
-    method: "GET"
-  }).then(function(response) {
-var motelDiv = $("#motel");
-
-  var motel = response.response.venues[0].name;
-  motelDiv.text(motel);
-  }); 
-}
 
 function queryFourSquare(latitude, longitude) {
    
